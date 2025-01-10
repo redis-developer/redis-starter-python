@@ -19,5 +19,8 @@ lint: install
 	@ruff check app
 	@ruff format app --check
 
+lock: install
+	@uv lock
+
 clean:
 	@rm -rf .venv/ .mypy_cache/ .ruff_cache/
