@@ -1,0 +1,12 @@
+# Python
+__pycache__
+*.pyc
+.mypy_cache
+.ruff_cache
+.coverage
+htmlcov
+.venv
+.env
+.env.*
+!.env.docker
+!.env.example

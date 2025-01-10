@@ -1,0 +1,9 @@
+# Python
+__pycache__
+*.pyc
+.mypy_cache
+.coverage
+htmlcov
+.venv
+.env
+.env.*
