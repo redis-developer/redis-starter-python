@@ -1,5 +1,5 @@
 install:
-	@uv sync
+	@uv sync --all-extras
 
 dev: install
 	@fastapi dev app/main.py
