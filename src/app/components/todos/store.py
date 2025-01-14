@@ -21,12 +21,20 @@ TODOS_PREFIX = "todos:"
 
 
 class TodoStatus(str, Enum):
+    """
+    An enum for todo status
+    """
+
     todo = "todo"
     in_progress = "in progress"
     complete = "complete"
 
 
 class Todo(BaseModel):
+    """
+    Defines a todo
+    """
+
     name: str
     status: TodoStatus
     created_date: datetime | None = None
@@ -42,17 +50,27 @@ class Todo(BaseModel):
 
 
 class TodoDocument(BaseModel):
+    """
+    Defines a todo document including id as returned from redis
+    """
+
     id: str
     value: Todo
 
 
 class Todos(BaseModel):
+    """
+    Defines a list of todos and a total, mapping to the results of FT.SEARCH
+    """
+
     total: int
     documents: List[TodoDocument]
 
 
 class TodoStore:
-    """Stores todos"""
+    """
+    Stores and retrieves todos in redis
+    """
 
     def __init__(self, redis: Redis):
         self.redis = redis
@@ -60,10 +78,16 @@ class TodoStore:
         self.PREFIX = TODOS_PREFIX
 
     async def initialize(self) -> None:
+        """
+        Sets up redis to be used with todos
+        """
         await self.create_index_if_not_exists()
         return None
 
     async def have_index(self) -> bool:
+        """
+        Checks if the TODOS_INDEX already exists in Redis
+        """
         try:
             await self.redis.ft(self.INDEX).info()
         except ResponseError as e:
@@ -75,6 +99,9 @@ class TodoStore:
         return True
 
     async def create_index_if_not_exists(self) -> None:
+        """
+        Creates the TODOS_INDEX if it doesn't exist already
+        """
         if await self.have_index():
             return None
 
@@ -101,6 +128,9 @@ class TodoStore:
         return None
 
     async def drop_index(self) -> None:
+        """
+        Drops the TODOS_INDEX if it exists
+        """
         if not await self.have_index():
             return None
 
@@ -115,36 +145,52 @@ class TodoStore:
         return None
 
     def format_id(self, id: str) -> str:
+        """
+        Allow for id with or without TODOS_PREFIX
+        """
         if re.match(f"^{self.PREFIX}", id):
             return id
 
         return f"{self.PREFIX}{id}"
 
-    def parse_todo_document(self, todo: Document) -> TodoDocument:
+    def deserialize_todo_document(self, todo: Document) -> TodoDocument:
+        """
+        Deserializes a TodoDocument from JSON
+        """
         return TodoDocument(
             id=todo.id,
             value=Todo(**from_json(todo.json, allow_partial=True)),  # type: ignore
         )
 
-    def parse_todo_documents(self, todos: list[Document]) -> list[TodoDocument]:
+    def deserialize_todo_documents(self, todos: list[Document]) -> list[TodoDocument]:
+        """
+        Deserializes a list[TodoDocument] from list[JSON]
+        """
         todo_docs = []
 
         for doc in todos:
-            todo_docs.append(self.parse_todo_document(doc))
+            todo_docs.append(self.deserialize_todo_document(doc))
 
         return todo_docs
 
     async def all(self) -> Todos:
+        """
+        Gets all todos
+        """
         try:
             result = await self.redis.ft(self.INDEX).search("*")
             return Todos(
-                total=result.total, documents=self.parse_todo_documents(result.docs)
+                total=result.total,
+                documents=self.deserialize_todo_documents(result.docs),
             )
         except Exception as e:
             logger.error(f"Error getting all todos: {e}")
             raise
 
     async def one(self, id: str) -> Todo:
+        """
+        Gets a todo by id
+        """
         id = self.format_id(id)
 
         try:
@@ -156,6 +202,9 @@ class TodoStore:
         return Todo(**json)
 
     async def search(self, name: str | None, status: TodoStatus | None) -> Todos:
+        """
+        Searches for todos by name and/or status
+        """
         searches = []
 
         if name is not None and len(name) > 0:
@@ -167,13 +216,17 @@ class TodoStore:
         try:
             result = await self.redis.ft(self.INDEX).search(Query(" ".join(searches)))
             return Todos(
-                total=result.total, documents=self.parse_todo_documents(result.docs)
+                total=result.total,
+                documents=self.deserialize_todo_documents(result.docs),
             )
         except Exception as e:
             logger.error(f"Error getting todo {id}: {e}")
             raise
 
     async def create(self, id: Optional[str], name: Optional[str]) -> TodoDocument:
+        """
+        Creates a todo
+        """
         dt = datetime.now(UTC)
 
         if name is None:
@@ -201,6 +254,9 @@ class TodoStore:
         return todo
 
     async def update(self, id: str, status: TodoStatus) -> Todo:
+        """
+        Updates a todo
+        """
         dt = datetime.now(UTC)
 
         todo = await self.one(id)
@@ -222,6 +278,9 @@ class TodoStore:
         return todo
 
     async def delete(self, id: str) -> None:
+        """
+        Deletes a todo
+        """
         try:
             await self.redis.json().delete(self.format_id(id))
         except Exception as e:
@@ -231,6 +290,9 @@ class TodoStore:
         return None
 
     async def delete_all(self) -> None:
+        """
+        Delete all todos
+        """
         todos = await self.all()
         coros = []
 

@@ -1,9 +1,12 @@
+from dotenv import load_dotenv
 import asyncio
 import pytest
-from app.redis import redis
+from app.redis import get_client
 from app.components.todos.store import TodoStatus, TodoStore
 
-todos = TodoStore(redis)
+load_dotenv()
+
+todos = TodoStore(get_client())
 
 @pytest.fixture(autouse=True)
 async def run_around_each():
