@@ -1,6 +1,6 @@
 import asyncio
 import re
-from datetime import datetime, UTC
+from datetime import UTC, datetime
 from enum import Enum
 from typing import List, Optional
 from uuid import uuid4
@@ -122,7 +122,8 @@ class TodoStore:
 
     def parse_todo_document(self, todo: Document) -> TodoDocument:
         return TodoDocument(
-            id=todo.id, value=Todo(**from_json(todo.json, allow_partial=True)) # type: ignore
+            id=todo.id,
+            value=Todo(**from_json(todo.json, allow_partial=True)),  # type: ignore
         )
 
     def parse_todo_documents(self, todos: list[Document]) -> list[TodoDocument]:
@@ -182,13 +183,10 @@ class TodoStore:
             id = str(uuid4())
 
         todo = TodoDocument(
-            id=self.format_id(id), 
+            id=self.format_id(id),
             value=Todo(
-                name=name, 
-                status=TodoStatus.todo, 
-                created_date=dt, 
-                updated_date=dt
-            )
+                name=name, status=TodoStatus.todo, created_date=dt, updated_date=dt
+            ),
         )
 
         try:
