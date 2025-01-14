@@ -19,6 +19,7 @@ classifiers = [
 ]
 dependencies = [
     "fastapi[standard] (>=0.115.6,<0.116.0)",
+    "pydantic>=2.10.5",
     "python-dotenv>=1.0.1",
     "redis[hiredis]>=5.2.1",
 ]
