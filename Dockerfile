@@ -26,7 +26,7 @@ RUN --mount=type=cache,target=/root/.cache/uv \
 ENV PYTHONPATH=/app
 
 COPY ./pyproject.toml ./uv.lock /app/
-COPY ./app /app/app
+COPY ./src /app/src/
 
 # Sync the project
 # Ref: https://docs.astral.sh/uv/guides/integration/docker/#intermediate-layers
@@ -37,5 +37,5 @@ ENV PORT 8080
 
 EXPOSE ${PORT}
 
-CMD ["sh", "-c", "fastapi run --port ${PORT} app/main.py"]
+CMD ["sh", "-c", "fastapi run --port ${PORT} src/app/main.py"]
 

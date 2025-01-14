@@ -1,7 +1,6 @@
-# Python
 __pycache__
 *.pyc
-.mypy_cache
+.*_cache
 .coverage
 htmlcov
 .venv

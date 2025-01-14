@@ -24,6 +24,12 @@ dependencies = [
     "redis[hiredis]>=5.2.1",
 ]
 
+[dependency-groups]
+dev = [
+    "pytest>=8.3.4",
+    "pytest-asyncio>=0.24.0",
+]
+
 [project.urls]
 Repository = "https://github.com/redis-developer/redis-starter-python.git"
 "Bug Tracker" = "https://github.com/redis-developer/redis-starter-python/issues"
@@ -34,8 +40,14 @@ dev = [
     "ruff<1.0.0,>=0.2.2",
 ]
 
+[tool.pytest.ini_options]
+pythonpath = "src"
+asyncio_default_fixture_loop_scope = "session"
+asyncio_mode = "auto"
+
 [tool.mypy]
 strict = true
+disallow_untyped_calls = false
 exclude = ["venv", ".venv"]
 
 [tool.ruff]

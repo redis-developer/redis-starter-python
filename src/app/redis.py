@@ -1,12 +1,9 @@
 import os
-from typing import Optional
 
 from redis.asyncio import Redis
 from redis.backoff import ExponentialBackoff
 from redis.exceptions import ConnectionError, TimeoutError
 from redis.retry import Retry
-
-from app.logger import logger
 
 redis_url = os.environ.get("REDIS_URL", "redis://localhost:6379")
 redis = Redis.from_url(
