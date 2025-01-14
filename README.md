@@ -3,6 +3,13 @@ This is a [Redis](https://redis.io/) starter template for Go:
 - [Redis Cloud](https://redis.io/try-free/)
 - [Echo](https://echo.labstack.com/)
 
+## Requirements
+
+- [make](https://www.make.com/en)
+- [python>=3.9](https://www.python.org/)
+- [docker](https://www.docker.com/)
+   - Optional
+
 ## Getting started
 
 Copy and edit the `.env` file:
@@ -36,6 +43,14 @@ You should have a server running on `http://localhost:<port>` where the port is 
 6. `DELETE /api/todos/:id` - Delete a todo by ID
 
 ## Running tests
+
+There are some tests in the `__tests__` folder that can be run with the following command:
+
+```bash
+make test
+```
+
+These tests setup and teardown on their own. You can modify them if you want to leave data in Redis.
 
 ## Running locally outside docker
 
