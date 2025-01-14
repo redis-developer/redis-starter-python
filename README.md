@@ -7,6 +7,7 @@ This is a [Redis](https://redis.io/) starter template for Go:
 
 - [make](https://www.make.com/en)
 - [python>=3.9](https://www.python.org/)
+- [uv](https://docs.astral.sh/uv/)
 - [docker](https://www.docker.com/)
    - Optional
 
