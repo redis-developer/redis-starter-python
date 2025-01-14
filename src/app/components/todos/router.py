@@ -30,18 +30,21 @@ router = APIRouter(lifespan=lifespan)
 
 @router.get("/", tags=["todos"])
 async def all() -> Todos:
+    """Gets all todos"""
     todos = get_todos()
     return await todos.all()
 
 
 @router.get("/search", tags=["todos"])
 async def search(name: str | None = None, status: TodoStatus | None = None) -> Todos:
+    """Searches for todos by name and/or status"""
     todos = get_todos()
     return await todos.search(name, status)
 
 
 @router.get("/{id}", tags=["todos"])
 async def one(id: str) -> Todo:
+    """Gets a todo by id"""
     todos = get_todos()
     return await todos.one(id)
 
@@ -53,6 +56,7 @@ class CreateTodo(BaseModel):
 
 @router.post("/", tags=["todos"])
 async def create(todo: CreateTodo) -> TodoDocument:
+    """Creates a todo"""
     todos = get_todos()
     return await todos.create(todo.id, todo.name)
 
@@ -63,11 +67,13 @@ class UpdateTodo(BaseModel):
 
 @router.patch("/{id}", tags=["todos"])
 async def update(id: str, todo: UpdateTodo) -> Todo:
+    """Updates a todo's status"""
     todos = get_todos()
     return await todos.update(id, todo.status)
 
 
 @router.delete("/{id}", tags=["todos"])
 async def delete(id: str) -> None:
+    """Deletes a todo"""
     todos = get_todos()
     return await todos.delete(id)

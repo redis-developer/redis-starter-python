@@ -255,7 +255,7 @@ class TodoStore:
 
     async def update(self, id: str, status: TodoStatus) -> Todo:
         """
-        Updates a todo
+        Updates a todo's status
         """
         dt = datetime.now(UTC)
 
