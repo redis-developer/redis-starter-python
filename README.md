@@ -55,10 +55,16 @@ These tests setup and teardown on their own. You can modify them if you want to 
 
 ## Running locally outside docker
 
-To run the development server outside of docker:
+To run the server outside of docker you need to first create a `.venv`:
 
 ```bash
-make install && source .venv/bin/activate && make dev
+make install && source .venv/bin/activate
+```
+
+From then on, you can run a dev server:
+
+```bash
+make dev
 ```
 
 ## Other Scripts
