@@ -58,7 +58,7 @@ These tests setup and teardown on their own. You can modify them if you want to 
 To run the development server outside of docker:
 
 ```bash
-make dev
+make install && source .venv/bin/activate && make dev
 ```
 
 ## Other Scripts

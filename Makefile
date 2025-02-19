@@ -26,4 +26,5 @@ lock: install
 	@uv lock
 
 clean:
-	@rm -rf .venv/ .mypy_cache/ .ruff_cache/
+	@rm -rf .venv/ .mypy_cache/ .ruff_cache/ .pytest_cache/
+	@find . -type d -name __pycache__ -exec rm -r {} \+
