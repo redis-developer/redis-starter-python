@@ -9,6 +9,7 @@ from app.redis import get_client
 
 todos_store: TodoStore | None = None
 
+
 def get_todos() -> TodoStore:
     global todos_store
 

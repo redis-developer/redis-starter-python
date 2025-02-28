@@ -10,7 +10,7 @@ maintainers = [
 ]
 readme = "README.md"
 license = "MIT"
-requires-python = ">=3.8"
+requires-python = ">=3.9"
 keywords = ["python", "fastapi", "redis", "starter", "redis-py"]
 classifiers = [
   "Development Status :: 4 - Beta",
@@ -27,7 +27,7 @@ dependencies = [
 [dependency-groups]
 dev = [
     "pytest>=8.3.4",
-    "pytest-asyncio>=0.24.0",
+    "pytest-asyncio>=0.25.3",
 ]
 
 [project.urls]

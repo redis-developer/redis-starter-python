@@ -34,7 +34,7 @@ Next, spin up docker containers:
 make docker
 ```
 
-You should have a server running on `http://localhost:<port>` where the port is set in your `.env` file (default is 8000). You can test the following routes:
+You should have a server running on `http://localhost:<port>` where the port is set in your `.env` file (default is 8080). You can test the following routes:
 
 1. `GET /api/todos` - Gets all todos
 2. `GET /api/todos/:id` - Gets a todo by ID
@@ -69,23 +69,7 @@ make dev
 
 ## Other Scripts
 
-Run a production server outside of docker:
-
-```bash
-make serve
-```
-
-Formatting code:
-
-```bash
-make format
-```
-
-Linting:
-
-```bash
-make lint
-```
+Run `make` to see the list of available commands.
 
 ## Connecting to Redis Cloud
 

@@ -1,0 +1,35 @@
+@Host = http://localhost:8080
+
+### Get All Todos
+GET {{Host}}/api/todos HTTP/1.1
+
+### Search Todos
+
+GET {{Host}}/api/todos/search?status=in progress HTTP/1.1
+
+### Get a single todo
+
+GET {{Host}}/api/todos/1 HTTP/1.1
+
+### Create a todo
+
+POST {{Host}}/api/todos HTTP/1.1
+Content-Type: application/json
+
+{
+    "id": "2",
+    "name": "Laundry"
+}
+
+### Update a todo
+
+PATCH {{Host}}/api/todos/2 HTTP/1.1
+Content-Type: application/json
+
+{
+    "status": "in progress"
+}
+
+### Delete a todo
+
+DELETE {{Host}}/api/todos/2 HTTP/1.1
