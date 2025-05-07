@@ -1,4 +1,4 @@
-This is a [Redis](https://redis.io/) starter template for Go:
+This is a [Redis](https://redis.io/) starter template for Python:
 
 - [Redis Cloud](https://redis.io/try-free/)
 - [Echo](https://echo.labstack.com/)
