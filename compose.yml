@@ -2,7 +2,7 @@ name: redis-starter-python
 services:
   redis:
     container_name: redis
-    image: "redis:8.0-M02"
+    image: "redis:alpine"
     ports:
       - 6379:6379
     deploy:
@@ -28,4 +28,3 @@ services:
 
 volumes:
   redis-data:
-

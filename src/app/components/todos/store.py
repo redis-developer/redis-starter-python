@@ -10,7 +10,7 @@ from pydantic_core import from_json
 from redis.asyncio import Redis
 from redis.commands.search.document import Document
 from redis.commands.search.field import TextField
-from redis.commands.search.indexDefinition import IndexDefinition, IndexType
+from redis.commands.search.index_definition import IndexDefinition, IndexType
 from redis.commands.search.query import Query
 from redis.exceptions import ResponseError
 
@@ -91,7 +91,7 @@ class TodoStore:
         try:
             await self.redis.ft(self.INDEX).info()
         except ResponseError as e:
-            if "Unknown index name" in str(e):
+            if "Unknown index name" in str(e) or "no such index" in str(e):
                 logger.debug(f"Index {self.INDEX} does not exist")
                 return False
 
