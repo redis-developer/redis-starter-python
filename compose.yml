@@ -1,7 +1,6 @@
 name: redis-starter-python
 services:
   redis:
-    container_name: redis
     image: "redis:alpine"
     ports:
       - 6379:6379
@@ -13,11 +12,13 @@ services:
       - redis-data:/data
 
   server:
-    container_name: server
     build: .
     ports:
       - "${PORT-8080}:${PORT-8080}"
     environment:
+      APP_ENV: ${APP_ENV-production}
+      LOG_LEVEL: ${LOG_LEVEL-INFO}
+      LOG_STREAM_KEY: ${LOG_STREAM_KEY-logs}
       PORT: ${PORT-8080}
     env_file:
       - .env

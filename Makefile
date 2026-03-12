@@ -13,14 +13,15 @@ install:           ## Install all dependencies
 
 dev:               ## Run a dev server and watch files to restart
 	@$(MAKE) install
-	@fastapi dev src/app/main.py --port 8080
+	@uv run fastapi dev src/app/main.py --port $${PORT:-8080}
 
 serve:             ## Run a production server
 	@$(MAKE) install
-	@fastapi run src/app/main.py --port 8080
+	@uv run fastapi run src/app/main.py --port $${PORT:-8080}
 
 test:              ## Run tests
-	@pytest -rxP
+	@$(MAKE) install
+	@uv run pytest -rxP
 
 docker:            ## Spin down docker containers and then rebuild and run them
 	@docker compose down
@@ -28,13 +29,13 @@ docker:            ## Spin down docker containers and then rebuild and run them
 
 format:            ## Format code
 	@$(MAKE) install
-	@ruff check src/app --fix
-	@ruff format src/app
+	@uv run ruff check src/app __test__ --fix
+	@uv run ruff format src/app __test__
 
 lint:              ## Lint code
 	@$(MAKE) install
-	@$(MAKE) format
-	@mypy src/app
+	@uv run ruff check src/app __test__
+	@uv run mypy src/app
 
 lock:              ## Update lock file
 	@$(MAKE) install

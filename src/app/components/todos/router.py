@@ -1,80 +1,45 @@
-from typing import AsyncIterator, Never
+from typing import Any
 
-from fastapi import APIRouter, FastAPI
-from fastapi.concurrency import asynccontextmanager
-from pydantic import BaseModel
+from fastapi import APIRouter, Request, Response
 
-from app.components.todos.store import Todo, TodoDocument, Todos, TodoStatus, TodoStore
-from app.redis import get_client
+from app.components.todos import controller
+from app.components.todos.store import Todo, TodoDocument, Todos
 
-todos_store: TodoStore | None = None
+router = APIRouter()
 
 
-def get_todos() -> TodoStore:
-    global todos_store
-
-    return todos_store if todos_store is not None else TodoStore(get_client())
-
-
-@asynccontextmanager
-async def lifespan(_: FastAPI) -> AsyncIterator[Never]:
-    # before
-    todos = get_todos()
-    await todos.initialize()
-    yield  # type: ignore
-    # after
-    return
-
-
-router = APIRouter(lifespan=lifespan)
-
-
-@router.get("/", tags=["todos"])
+@router.get("", tags=["todos"])
 async def all() -> Todos:
     """Gets all todos"""
-    todos = get_todos()
-    return await todos.all()
+    return await controller.get_all()
 
 
 @router.get("/search", tags=["todos"])
-async def search(name: str | None = None, status: TodoStatus | None = None) -> Todos:
+async def search(request: Request) -> Todos:
     """Searches for todos by name and/or status"""
-    todos = get_todos()
-    return await todos.search(name, status)
+    return await controller.search(dict(request.query_params))
 
 
 @router.get("/{id}", tags=["todos"])
 async def one(id: str) -> Todo:
     """Gets a todo by id"""
-    todos = get_todos()
-    return await todos.one(id)
+    return await controller.get_one({"id": id})
 
 
-class CreateTodo(BaseModel):
-    id: str | None = None
-    name: str
-
-
-@router.post("/", tags=["todos"])
-async def create(todo: CreateTodo) -> TodoDocument:
+@router.post("", tags=["todos"])
+async def create(todo: dict[str, Any]) -> TodoDocument:
     """Creates a todo"""
-    todos = get_todos()
-    return await todos.create(todo.id, todo.name)
-
-
-class UpdateTodo(BaseModel):
-    status: TodoStatus
+    return await controller.create(todo)
 
 
 @router.patch("/{id}", tags=["todos"])
-async def update(id: str, todo: UpdateTodo) -> Todo:
+async def update(id: str, todo: dict[str, Any]) -> Todo:
     """Updates a todo's status"""
-    todos = get_todos()
-    return await todos.update(id, todo.status)
+    return await controller.update({"id": id}, todo)
 
 
 @router.delete("/{id}", tags=["todos"])
-async def delete(id: str) -> None:
+async def delete(id: str) -> Response:
     """Deletes a todo"""
-    todos = get_todos()
-    return await todos.delete(id)
+    await controller.delete({"id": id})
+    return Response(status_code=200)

@@ -7,6 +7,10 @@ GET {{Host}}/api/todos HTTP/1.1
 
 GET {{Host}}/api/todos/search?status=in progress HTTP/1.1
 
+### Search Todos by Name
+
+GET {{Host}}/api/todos/search?name=Laundry HTTP/1.1
+
 ### Get a single todo
 
 GET {{Host}}/api/todos/1 HTTP/1.1
@@ -17,7 +21,6 @@ POST {{Host}}/api/todos HTTP/1.1
 Content-Type: application/json
 
 {
-    "id": "2",
     "name": "Laundry"
 }
 

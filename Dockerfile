@@ -1,8 +1,8 @@
-FROM python:3.12-slim
+FROM python:3.14.3-slim
 ENV PYTHONUNBUFFERED=1
 WORKDIR /app/
 
-COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
+COPY --from=ghcr.io/astral-sh/uv:0.10.9 /uv /uvx /bin/
 
 # Place executables in the environment at the front of the path
 # Ref: https://docs.astral.sh/uv/guides/integration/docker/#using-the-environment
@@ -38,4 +38,3 @@ ENV PORT 8080
 EXPOSE ${PORT}
 
 CMD ["sh", "-c", "fastapi run --port ${PORT} src/app/main.py"]
-

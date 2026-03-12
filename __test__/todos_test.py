@@ -1,19 +1,20 @@
-from dotenv import load_dotenv
 import asyncio
+
 import pytest
-from app.redis import get_client
-from app.components.todos.store import TodoStatus, TodoStore
 
-load_dotenv()
+from app.components.todos.store import TodoStatus, get_todos_store
 
-todos = TodoStore(get_client())
+todos = get_todos_store()
+
 
 @pytest.fixture(autouse=True)
 async def run_around_each():
     await todos.initialize()
+    await todos.delete_all()
     yield
     await todos.delete_all()
     await todos.drop_index()
+
 
 async def test_crud_for_single_todo():
     created_todo = await todos.create(None, "Take out the trash")
@@ -39,9 +40,9 @@ async def test_crud_for_single_todo():
 
 async def test_crud_for_multiple_todos():
     all_todo_names = [
-      "Take out the trash",
-      "Vacuum downstairs",
-      "Fold the laundry",
+        "Take out the trash",
+        "Vacuum downstairs",
+        "Fold the laundry",
     ]
 
     coros = []
